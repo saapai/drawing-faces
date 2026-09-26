@@ -193,18 +193,34 @@ export default function EssayPage() {
 
   return (
     <main className={styles.main}>
-      <article className={styles.article}>
 
-        {/* Header */}
-        <header className={styles.header}>
+      {/* Hero — breaks out full-width, art behind title */}
+      <header className={styles.hero}>
+        {/* Art layer - absolute positioned behind everything */}
+        <div className={styles.heroArtLayer} aria-hidden="true">
+          <img
+            src="/hero-art.jpg"
+            alt=""
+            className={styles.heroArtImg}
+          />
+        </div>
+
+        {/* Text content - above art */}
+        <div className={styles.heroContent}>
           <p className={styles.date}>September 2026</p>
           <h1 className={styles.title}>drawing faces is really hard</h1>
-          <div className={styles.ornament} aria-hidden="true">
-            <span className={styles.ornamentLine} />
-            <span className={styles.ornamentGlyph}>◇</span>
-            <span className={styles.ornamentLine} />
-          </div>
-        </header>
+        </div>
+
+        {/* Ornament at bottom of hero */}
+        <div className={styles.ornament} aria-hidden="true">
+          <span className={styles.ornamentLine} />
+          <span className={styles.ornamentGlyph}>◇</span>
+          <span className={styles.ornamentLine} />
+        </div>
+      </header>
+
+      {/* Prose in constrained column */}
+      <div className={styles.article}>
 
         {/* Essay body */}
         <div className={styles.body}>
@@ -292,7 +308,7 @@ export default function EssayPage() {
           </form>
         </section>
 
-      </article>
+      </div>
     </main>
   );
 }
