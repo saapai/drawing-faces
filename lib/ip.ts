@@ -1,26 +1,23 @@
 import { createHash } from 'crypto';
 
 export function hashIP(ip: string): string {
-  return createHash('sha256').update(ip + process.env.IP_SALT || 'drawing-faces-salt').digest('hex').slice(0, 16);
+  return createHash('sha256').update(ip + (process.env.IP_SALT || 'drawing-faces-salt')).digest('hex').slice(0, 16);
 }
 
 export function anonymousName(ipHash: string): string {
   const adjectives = [
-    'coastal', 'quiet', 'amber', 'morning', 'distant', 'silver', 'hollow',
-    'wandering', 'still', 'faded', 'open', 'gentle', 'deep', 'pale', 'soft',
-    'late', 'early', 'clear', 'slow', 'warm', 'cold', 'dim', 'bright', 'lone'
+    'silver', 'amber', 'crimson', 'indigo', 'golden', 'cobalt', 'russet',
+    'ivory', 'velvet', 'jade', 'onyx', 'scarlet', 'tawny', 'ashen', 'bronze',
+    'umber', 'lilac', 'slate', 'pearl', 'ochre',
   ];
-  const nouns = [
-    'fog', 'oak', 'tide', 'field', 'ink', 'stone', 'pine', 'reed',
-    'hill', 'dust', 'rain', 'wind', 'cliff', 'lake', 'path', 'light',
-    'creek', 'drift', 'peak', 'shade', 'brook', 'mist', 'dusk', 'dawn'
+  const animals = [
+    'fox', 'wolf', 'hawk', 'bear', 'lynx', 'crane', 'elk', 'owl',
+    'raven', 'heron', 'bison', 'deer', 'finch', 'otter', 'wren',
+    'ibis', 'vole', 'mink', 'kite', 'swift',
   ];
 
   const h1 = parseInt(ipHash.slice(0, 8), 16);
   const h2 = parseInt(ipHash.slice(8, 16), 16);
 
-  const adj = adjectives[h1 % adjectives.length];
-  const noun = nouns[h2 % nouns.length];
-
-  return `${adj} ${noun}`;
+  return `${adjectives[h1 % adjectives.length]} ${animals[h2 % animals.length]}`;
 }

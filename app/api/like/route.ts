@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { hashIP } from '@/lib/ip';
 
-// Graceful KV wrapper - works without env vars in dev
 async function getKV() {
   const url = process.env.KV_REST_API_URL;
   const token = process.env.KV_REST_API_TOKEN;
@@ -24,17 +23,20 @@ export async function GET(req: NextRequest) {
 
   const kv = await getKV();
   if (!kv) {
-    return NextResponse.json({ count: 0, liked: false });
+    return NextResponse.json({ up: 0, down: 0, vote: null });
   }
 
-  const [count, liked] = await Promise.all([
-    kv.get<number>('likes:count') ?? 0,
-    kv.sismember('likes:set', ipHash),
+  const [up, down, isUp, isDown] = await Promise.all([
+    kv.get<number>('votes:up:count'),
+    kv.get<number>('votes:down:count'),
+    kv.sismember('votes:up:set', ipHash),
+    kv.sismember('votes:down:set', ipHash),
   ]);
 
   return NextResponse.json({
-    count: count ?? 0,
-    liked: liked === 1,
+    up: up ?? 0,
+    down: down ?? 0,
+    vote: isUp === 1 ? 'up' : isDown === 1 ? 'down' : null,
   });
 }
 
@@ -42,35 +44,54 @@ export async function POST(req: NextRequest) {
   const ip = getIP(req);
   const ipHash = hashIP(ip);
 
+  let body: { direction?: 'up' | 'down' };
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ error: 'Invalid request.' }, { status: 400 });
+  }
+
+  const direction = body.direction;
+  if (direction !== 'up' && direction !== 'down') {
+    return NextResponse.json({ error: 'direction must be up or down' }, { status: 400 });
+  }
+
   const kv = await getKV();
   if (!kv) {
-    return NextResponse.json({ count: 0, liked: false });
+    return NextResponse.json({ up: 0, down: 0, vote: null });
   }
 
-  const isLiked = await kv.sismember('likes:set', ipHash);
+  const opposite = direction === 'up' ? 'down' : 'up';
+  const [isCurrent, isOpposite] = await Promise.all([
+    kv.sismember(`votes:${direction}:set`, ipHash),
+    kv.sismember(`votes:${opposite}:set`, ipHash),
+  ]);
 
-  let count: number;
-  let liked: boolean;
+  const pipe = kv.pipeline();
 
-  if (isLiked === 1) {
-    // Unlike
-    await Promise.all([
-      kv.srem('likes:set', ipHash),
-      kv.decr('likes:count'),
-    ]);
-    const newCount = await kv.get<number>('likes:count') ?? 0;
-    count = Math.max(0, newCount);
-    liked = false;
+  if (isOpposite === 1) {
+    pipe.srem(`votes:${opposite}:set`, ipHash);
+    pipe.decr(`votes:${opposite}:count`);
+  }
+
+  if (isCurrent === 1) {
+    pipe.srem(`votes:${direction}:set`, ipHash);
+    pipe.decr(`votes:${direction}:count`);
   } else {
-    // Like
-    await Promise.all([
-      kv.sadd('likes:set', ipHash),
-      kv.incr('likes:count'),
-    ]);
-    const newCount = await kv.get<number>('likes:count') ?? 1;
-    count = newCount;
-    liked = true;
+    pipe.sadd(`votes:${direction}:set`, ipHash);
+    pipe.incr(`votes:${direction}:count`);
   }
 
-  return NextResponse.json({ count, liked });
+  await pipe.exec();
+
+  const [up, down] = await Promise.all([
+    kv.get<number>('votes:up:count'),
+    kv.get<number>('votes:down:count'),
+  ]);
+
+  return NextResponse.json({
+    up: Math.max(0, up ?? 0),
+    down: Math.max(0, down ?? 0),
+    vote: isCurrent === 1 ? null : direction,
+  });
 }

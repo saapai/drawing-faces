@@ -1,217 +1,236 @@
-/* Design tokens */
+/* ── Design tokens ── */
 :root {
   --paper: #F4EFE6;
   --ink: #1C1A17;
   --graphite: #6B6560;
   --rust: #8B3A2E;
-  --parchment: #EDE5D5;
-  --rule: rgba(28, 26, 23, 0.14);
-  --rule-strong: rgba(28, 26, 23, 0.26);
+  --rule: rgba(28, 26, 23, 0.13);
+  --rule-strong: rgba(28, 26, 23, 0.24);
   --font-body: var(--font-eb-garamond), 'EB Garamond', Georgia, serif;
   --font-display: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
 }
 
-/* Page wrapper */
+/* ── Page ── */
 .main {
-  background-color: var(--paper);
+  background: var(--paper);
   min-height: 100vh;
-  padding: 0 0 8rem;
+  padding-bottom: 8rem;
+  position: relative;
 }
 
-/* Article container */
-.article {
-  max-width: 38rem;
-  margin: 0 auto;
-  padding: 0 1.5rem;
+/* Grain overlay */
+.main::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.032;
+  pointer-events: none;
+  z-index: 9998;
 }
 
-/* ── Hero (full-width, art behind title) ── */
+/* ── HERO: full-height, asymmetric ── */
 .hero {
   position: relative;
   width: 100%;
-  max-width: none;
-  margin: 0 auto 3rem;
-  padding: 6rem 1.5rem 5rem;
+  min-height: 100svh;
+  overflow: hidden;
+  background: var(--paper);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  min-height: 520px;
-  background: var(--paper);
+  justify-content: flex-end;
+  padding: 0 7vw 5rem;
 }
 
+/* Robot: right-anchored, fills height */
 .heroArtLayer {
   position: absolute;
   inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   pointer-events: none;
+  overflow: hidden;
 }
 
 .heroArtImg {
-  width: 480px;
-  max-width: 65vw;
-  height: auto;
-  object-fit: contain;
+  position: absolute;
+  right: 0;
+  top: -8%;
+  height: 120%;
+  width: auto;
+  max-width: 58vw;
+  object-fit: cover;
+  object-position: top center;
+  filter: grayscale(0.15) sepia(0.5) contrast(0.82) brightness(1.08);
   mix-blend-mode: multiply;
-  opacity: 0.5;
-  mask-image: radial-gradient(
-    ellipse 52% 58% at 50% 48%,
-    rgba(0,0,0,0.95) 15%,
-    rgba(0,0,0,0.7) 40%,
-    rgba(0,0,0,0.2) 65%,
-    transparent 85%
+  opacity: 0.58;
+  /* Dissolve left edge toward cream */
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0,0,0,0.2) 10%,
+    rgba(0,0,0,0.65) 26%,
+    rgba(0,0,0,1) 48%
   );
-  -webkit-mask-image: radial-gradient(
-    ellipse 52% 58% at 50% 48%,
-    rgba(0,0,0,0.95) 15%,
-    rgba(0,0,0,0.7) 40%,
-    rgba(0,0,0,0.2) 65%,
-    transparent 85%
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0,0,0,0.2) 10%,
+    rgba(0,0,0,0.65) 26%,
+    rgba(0,0,0,1) 48%
   );
-  filter: sepia(0.35) contrast(0.9) brightness(1.05);
+  will-change: transform;
 }
 
+/* Bottom cream fade */
+.heroFade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 36%;
+  background: linear-gradient(to bottom, transparent 0%, var(--paper) 100%);
+  pointer-events: none;
+}
+
+/* Title: bottom-left, very large, left-aligned */
 .heroContent {
   position: relative;
   z-index: 2;
-  text-align: center;
-  max-width: 38rem;
-}
-
-.date {
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: 0.68rem;
-  font-weight: 400;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--graphite);
-  margin-bottom: 1.4rem;
+  max-width: 62vw;
 }
 
 .title {
   font-family: var(--font-display);
-  font-size: clamp(2.8rem, 7vw, 5.5rem);
-  font-weight: 400;
+  font-weight: 300;
   font-style: italic;
-  line-height: 1.0;
+  line-height: 0.88;
+  letter-spacing: -0.022em;
   color: var(--ink);
-  letter-spacing: -0.015em;
-  text-align: center;
-  margin-bottom: 0;
-}
-
-/* Ornamental divider */
-.ornament {
-  position: relative;
-  z-index: 2;
+  margin: 0;
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  width: 100%;
-  max-width: 38rem;
-  margin-top: 3rem;
+  flex-direction: column;
 }
 
-.ornamentLine {
-  flex: 1;
-  height: 1px;
-  background: var(--rule-strong);
+.title span {
+  display: block;
+  font-size: clamp(3.8rem, 9.5vw, 9rem);
 }
 
-.ornamentGlyph {
-  font-family: var(--font-display);
-  font-size: 0.75rem;
-  color: var(--graphite);
-  letter-spacing: 0.05em;
+/* Thin vertical scroll indicator */
+.heroBottom {
+  position: absolute;
+  bottom: 0;
+  left: 7vw;
+  z-index: 2;
+  padding-bottom: 0;
+}
+
+.heroScrollLine {
+  display: block;
+  width: 1px;
+  height: 3.5rem;
+  background: linear-gradient(to bottom, rgba(28,26,23,0.35), transparent);
+}
+
+/* ── Article column ── */
+.article {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 5rem 1.5rem 0;
 }
 
 /* ── Essay body ── */
 .body {
-  margin-top: 3rem;
+  margin-bottom: 1rem;
 }
 
 .paragraph {
   font-family: var(--font-body);
-  font-size: 1.2rem;
-  line-height: 1.72;
+  font-size: 1.22rem;
+  line-height: 1.74;
   color: var(--ink);
-  margin-bottom: 1.6em;
+  margin-bottom: 1.65em;
   hanging-punctuation: first last;
 }
 
-/* First paragraph: tracked uppercase opening treatment */
-.firstParagraph::first-line {
-  font-variant: small-caps;
-  letter-spacing: 0.06em;
-  font-size: 1.25rem;
+/* Drop cap on opening paragraph */
+.firstParagraph::first-letter {
+  font-family: var(--font-display);
+  font-size: 5.2em;
+  font-style: italic;
+  font-weight: 400;
+  float: left;
+  line-height: 0.72;
+  margin-right: 0.07em;
+  margin-top: 0.12em;
+  color: var(--ink);
+}
+
+/* Section break: spaced asterism */
+.sectionBreak {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.4rem;
+  margin: 2.5rem 0 3rem;
+  color: var(--graphite);
+  font-size: 0.72rem;
+  letter-spacing: 0.25em;
+  opacity: 0.5;
 }
 
 /* End mark */
 .endMark {
   font-family: var(--font-display);
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: var(--graphite);
   text-align: center;
-  margin: 3rem 0 2.5rem;
-  letter-spacing: 0.1em;
+  margin: 3.5rem 0 2.5rem;
+  opacity: 0.55;
 }
 
-/* ── Reactions ── */
+/* ── Votes ── */
 .reactions {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 1rem;
   margin-bottom: 3rem;
 }
 
-.likeBtn {
+.voteBtn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.45rem;
   background: none;
   border: 1px solid var(--rule-strong);
   border-radius: 2rem;
-  padding: 0.5rem 1.1rem;
+  padding: 0.45rem 1rem;
   cursor: pointer;
-  color: var(--graphite);
-  font-family: system-ui, -apple-system, sans-serif;
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  transition: border-color 0.18s ease, color 0.18s ease, background 0.18s ease;
-}
-
-.likeBtn:hover {
-  border-color: var(--rust);
-  color: var(--rust);
-}
-
-.likeBtn:disabled {
+  font-size: 0.9rem;
+  transition: border-color 0.18s ease, opacity 0.18s ease, background 0.18s ease;
   opacity: 0.6;
+}
+
+.voteBtn:hover:not(:disabled) {
+  opacity: 1;
+  border-color: rgba(28,26,23,0.5);
+}
+
+.voteBtn:disabled {
   cursor: default;
 }
 
-.likeBtnActive {
-  border-color: var(--rust);
-  color: var(--rust);
+.voteBtnActive {
+  opacity: 1;
+  border-color: var(--ink);
+  background: rgba(28, 26, 23, 0.05);
 }
 
-.likeIcon {
-  font-size: 0.8rem;
-  line-height: 1;
-}
-
-.likeLabel {
-  line-height: 1;
-}
-
-.likeCount {
-  font-size: 0.68rem;
-  opacity: 0.7;
-  line-height: 1;
+.voteCount {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.7rem;
+  color: var(--graphite);
+  letter-spacing: 0.02em;
 }
 
 /* ── Section rule ── */
@@ -222,15 +241,11 @@
 }
 
 /* ── Comments ── */
-.comments {
-  /* uses same max-width from article */
-}
-
 .commentsHeading {
   font-family: system-ui, -apple-system, sans-serif;
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   font-weight: 400;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--graphite);
   margin-bottom: 2rem;
@@ -247,7 +262,6 @@
 .commentList {
   display: flex;
   flex-direction: column;
-  gap: 0;
   margin-bottom: 2.5rem;
 }
 
@@ -269,7 +283,7 @@
 
 .commentName {
   font-family: system-ui, -apple-system, sans-serif;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--graphite);
@@ -277,20 +291,20 @@
 
 .commentDot {
   color: var(--rule-strong);
-  font-size: 0.8rem;
+  font-size: 0.85rem;
 }
 
 .commentTime {
   font-family: system-ui, -apple-system, sans-serif;
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   color: var(--graphite);
-  opacity: 0.7;
+  opacity: 0.65;
 }
 
 .commentText {
   font-family: var(--font-body);
   font-size: 1.05rem;
-  line-height: 1.6;
+  line-height: 1.62;
   color: var(--ink);
 }
 
@@ -321,7 +335,7 @@
 
 .commentInput::placeholder {
   color: var(--graphite);
-  opacity: 0.5;
+  opacity: 0.45;
   font-style: italic;
 }
 
@@ -346,8 +360,7 @@
   font-family: system-ui, -apple-system, sans-serif;
   font-size: 0.65rem;
   color: var(--graphite);
-  opacity: 0.6;
-  letter-spacing: 0.05em;
+  opacity: 0.55;
 }
 
 .commentSubmit {
@@ -355,7 +368,7 @@
   border: none;
   cursor: pointer;
   font-family: system-ui, -apple-system, sans-serif;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--graphite);
@@ -370,32 +383,36 @@
 }
 
 .commentSubmit:disabled {
-  opacity: 0.35;
+  opacity: 0.3;
   cursor: default;
 }
 
-/* ── Responsive ── */
-@media (max-width: 600px) {
-  .main {
-    padding: 0 0 6rem;
-  }
-
+/* ── Mobile ── */
+@media (max-width: 640px) {
   .hero {
-    min-height: 380px;
-    padding: 4rem 1.25rem 3.5rem;
+    min-height: 90svh;
+    padding: 0 1.5rem 4rem;
   }
 
   .heroArtImg {
-    width: 340px;
+    right: -5%;
     max-width: 90vw;
-    opacity: 0.45;
+    opacity: 0.46;
   }
 
-  .title {
-    font-size: clamp(2.2rem, 10vw, 3rem);
+  .heroContent {
+    max-width: 100%;
   }
 
-  .paragraph {
-    font-size: 1.1rem;
+  .title span {
+    font-size: clamp(3rem, 13vw, 5rem);
+  }
+
+  .article {
+    padding-top: 3.5rem;
+  }
+
+  .firstParagraph::first-letter {
+    font-size: 4em;
   }
 }
