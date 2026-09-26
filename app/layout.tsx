@@ -1,20 +1,20 @@
 import type { Metadata } from 'next';
-import { Cormorant_Garamond, EB_Garamond } from 'next/font/google';
+import { Playfair_Display, Lora } from 'next/font/google';
 import './globals.css';
 
-const cormorant = Cormorant_Garamond({
+const playfair = Playfair_Display({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '500', '600', '700', '800'],
   style: ['normal', 'italic'],
-  variable: '--font-cormorant',
+  variable: '--font-playfair',
   display: 'swap',
 });
 
-const ebGaramond = EB_Garamond({
+const lora = Lora({
   subsets: ['latin'],
-  weight: ['400', '500'],
+  weight: ['400', '500', '600'],
   style: ['normal', 'italic'],
-  variable: '--font-eb-garamond',
+  variable: '--font-lora',
   display: 'swap',
 });
 
@@ -34,7 +34,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${ebGaramond.variable}`}>
+    <html lang="en" className={`${playfair.variable} ${lora.variable}`}>
       <body>{children}</body>
     </html>
   );

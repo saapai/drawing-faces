@@ -3,6 +3,24 @@
 import { useState, useEffect, useRef } from 'react';
 import styles from './page.module.css';
 
+function ThumbUp({ active }: { active: boolean }) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z" />
+      <path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
+    </svg>
+  );
+}
+
+function ThumbDown({ active }: { active: boolean }) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3H10z" />
+      <path d="M17 2h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17" />
+    </svg>
+  );
+}
+
 interface Comment {
   id: string;
   text: string;
@@ -240,21 +258,19 @@ export default function EssayPage() {
             onClick={() => handleVote('up')}
             disabled={voteLoading}
             className={`${styles.voteBtn} ${vote === 'up' ? styles.voteBtnActive : ''}`}
-            aria-label="Agree"
+            aria-label="Helpful"
           >
-            <span>+</span>
-            <span>agree</span>
-            {upCount > 0 && <span className={styles.voteCount}>{upCount}</span>}
+            <ThumbUp active={vote === 'up'} />
+            <span className={styles.voteCount}>{upCount}</span>
           </button>
           <button
             onClick={() => handleVote('down')}
             disabled={voteLoading}
             className={`${styles.voteBtn} ${vote === 'down' ? styles.voteBtnActive : ''}`}
-            aria-label="Disagree"
+            aria-label="Not helpful"
           >
-            <span>&#8722;</span>
-            <span>disagree</span>
-            {downCount > 0 && <span className={styles.voteCount}>{downCount}</span>}
+            <ThumbDown active={vote === 'down'} />
+            <span className={styles.voteCount}>{downCount}</span>
           </button>
         </div>
 
@@ -262,10 +278,10 @@ export default function EssayPage() {
 
         {/* Comments */}
         <section className={styles.comments}>
-          <h2 className={styles.commentsHeading}>responses</h2>
+          <h2 className={styles.commentsHeading}>comments</h2>
 
           {commentsLoaded && comments.length === 0 && (
-            <p className={styles.noComments}>No responses yet. Be the first.</p>
+            <p className={styles.noComments}>No comments yet.</p>
           )}
 
           {comments.length > 0 && (
@@ -288,7 +304,7 @@ export default function EssayPage() {
               ref={textareaRef}
               value={commentText}
               onChange={handleTextareaInput}
-              placeholder="leave a response"
+              placeholder="leave a comment…"
               className={styles.commentInput}
               rows={2}
               maxLength={800}
