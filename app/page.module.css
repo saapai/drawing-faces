@@ -1,0 +1,333 @@
+/* Design tokens */
+:root {
+  --paper: #F4EFE6;
+  --ink: #1C1A17;
+  --graphite: #6B6560;
+  --rust: #8B3A2E;
+  --parchment: #EDE5D5;
+  --rule: rgba(28, 26, 23, 0.14);
+  --rule-strong: rgba(28, 26, 23, 0.26);
+  --font-body: var(--font-eb-garamond), 'EB Garamond', Georgia, serif;
+  --font-display: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+}
+
+/* Page wrapper */
+.main {
+  background-color: var(--paper);
+  min-height: 100vh;
+  padding: 7rem 1.5rem 8rem;
+}
+
+/* Article container */
+.article {
+  max-width: 38rem;
+  margin: 0 auto;
+}
+
+/* ── Header ── */
+.header {
+  margin-bottom: 4rem;
+}
+
+.date {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--graphite);
+  margin-bottom: 1.8rem;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.05;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+  margin-bottom: 2.5rem;
+}
+
+/* Ornamental divider */
+.ornament {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0;
+}
+
+.ornamentLine {
+  flex: 1;
+  height: 1px;
+  background: var(--rule-strong);
+}
+
+.ornamentGlyph {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  color: var(--graphite);
+  letter-spacing: 0.05em;
+}
+
+/* ── Essay body ── */
+.body {
+  margin-top: 3rem;
+}
+
+.paragraph {
+  font-family: var(--font-body);
+  font-size: 1.2rem;
+  line-height: 1.72;
+  color: var(--ink);
+  margin-bottom: 1.6em;
+  hanging-punctuation: first last;
+}
+
+/* First paragraph: tracked uppercase opening treatment */
+.firstParagraph::first-line {
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+  font-size: 1.25rem;
+}
+
+/* End mark */
+.endMark {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  color: var(--graphite);
+  text-align: center;
+  margin: 3rem 0 2.5rem;
+  letter-spacing: 0.1em;
+}
+
+/* ── Reactions ── */
+.reactions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 3rem;
+}
+
+.likeBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: 1px solid var(--rule-strong);
+  border-radius: 2rem;
+  padding: 0.5rem 1.1rem;
+  cursor: pointer;
+  color: var(--graphite);
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: border-color 0.18s ease, color 0.18s ease, background 0.18s ease;
+}
+
+.likeBtn:hover {
+  border-color: var(--rust);
+  color: var(--rust);
+}
+
+.likeBtn:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.likeBtnActive {
+  border-color: var(--rust);
+  color: var(--rust);
+}
+
+.likeIcon {
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
+.likeLabel {
+  line-height: 1;
+}
+
+.likeCount {
+  font-size: 0.68rem;
+  opacity: 0.7;
+  line-height: 1;
+}
+
+/* ── Section rule ── */
+.sectionRule {
+  border: none;
+  border-top: 1px solid var(--rule);
+  margin: 0 0 3rem;
+}
+
+/* ── Comments ── */
+.comments {
+  /* uses same max-width from article */
+}
+
+.commentsHeading {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--graphite);
+  margin-bottom: 2rem;
+}
+
+.noComments {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--graphite);
+  font-style: italic;
+  margin-bottom: 2rem;
+}
+
+.commentList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 2.5rem;
+}
+
+.comment {
+  padding: 1.25rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.comment:first-child {
+  border-top: 1px solid var(--rule);
+}
+
+.commentMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.commentName {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--graphite);
+}
+
+.commentDot {
+  color: var(--rule-strong);
+  font-size: 0.8rem;
+}
+
+.commentTime {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.68rem;
+  color: var(--graphite);
+  opacity: 0.7;
+}
+
+.commentText {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+/* ── Comment form ── */
+.commentForm {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.commentInput {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--ink);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--rule-strong);
+  padding: 0.5rem 0 0.75rem;
+  resize: none;
+  outline: none;
+  width: 100%;
+  min-height: 3.5rem;
+  transition: border-color 0.18s ease;
+  overflow: hidden;
+}
+
+.commentInput::placeholder {
+  color: var(--graphite);
+  opacity: 0.5;
+  font-style: italic;
+}
+
+.commentInput:focus {
+  border-bottom-color: var(--ink);
+}
+
+.commentError {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.72rem;
+  color: var(--rust);
+  letter-spacing: 0.04em;
+}
+
+.commentActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.commentChar {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.65rem;
+  color: var(--graphite);
+  opacity: 0.6;
+  letter-spacing: 0.05em;
+}
+
+.commentSubmit {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--graphite);
+  padding: 0.35rem 0;
+  transition: color 0.18s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.commentSubmit:hover:not(:disabled) {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+
+.commentSubmit:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .main {
+    padding: 4rem 1.25rem 6rem;
+  }
+
+  .title {
+    font-size: clamp(2rem, 10vw, 3rem);
+  }
+
+  .paragraph {
+    font-size: 1.1rem;
+  }
+}
