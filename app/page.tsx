@@ -240,18 +240,20 @@ export default function EssayPage() {
             onClick={() => handleVote('up')}
             disabled={voteLoading}
             className={`${styles.voteBtn} ${vote === 'up' ? styles.voteBtnActive : ''}`}
-            aria-label="Thumbs up"
+            aria-label="Agree"
           >
-            <span>👍</span>
+            <span>+</span>
+            <span>agree</span>
             {upCount > 0 && <span className={styles.voteCount}>{upCount}</span>}
           </button>
           <button
             onClick={() => handleVote('down')}
             disabled={voteLoading}
             className={`${styles.voteBtn} ${vote === 'down' ? styles.voteBtnActive : ''}`}
-            aria-label="Thumbs down"
+            aria-label="Disagree"
           >
-            <span>👎</span>
+            <span>&#8722;</span>
+            <span>disagree</span>
             {downCount > 0 && <span className={styles.voteCount}>{downCount}</span>}
           </button>
         </div>

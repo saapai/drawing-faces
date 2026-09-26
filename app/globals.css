@@ -4,6 +4,10 @@
   padding: 0;
 }
 
+html, body {
+  background: #0D0B09;
+}
+
 html {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
@@ -11,7 +15,6 @@ html {
 }
 
 body {
-  background-color: #F4EFE6;
   color: #1C1A17;
   font-family: 'EB Garamond', Georgia, serif;
 }

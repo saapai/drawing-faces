@@ -1,45 +1,36 @@
 /* ── Design tokens ── */
 :root {
+  --dark: #0D0B09;
   --paper: #F4EFE6;
   --ink: #1C1A17;
   --graphite: #6B6560;
   --rust: #8B3A2E;
   --rule: rgba(28, 26, 23, 0.13);
   --rule-strong: rgba(28, 26, 23, 0.24);
+  --cream-text: #EDE7DC;
   --font-body: var(--font-eb-garamond), 'EB Garamond', Georgia, serif;
   --font-display: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
 }
 
 /* ── Page ── */
 .main {
-  background: var(--paper);
+  background: var(--dark);
   min-height: 100vh;
   padding-bottom: 8rem;
   position: relative;
 }
 
-/* Grain overlay */
-.main::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-  opacity: 0.032;
-  pointer-events: none;
-  z-index: 9998;
-}
-
-/* ── HERO: full-height, asymmetric ── */
+/* ── HERO: full-height, dark ── */
 .hero {
   position: relative;
   width: 100%;
   min-height: 100svh;
-  overflow: hidden;
-  background: var(--paper);
+  background: var(--dark);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 0 7vw 5rem;
+  padding: 0 8vw 5.5rem;
+  overflow: hidden;
 }
 
 /* Robot: right-anchored, fills height */
@@ -53,58 +44,57 @@
 .heroArtImg {
   position: absolute;
   right: 0;
-  top: -8%;
-  height: 120%;
+  top: -5%;
+  height: 115%;
   width: auto;
-  max-width: 58vw;
+  max-width: 52vw;
   object-fit: cover;
   object-position: top center;
-  filter: grayscale(0.15) sepia(0.5) contrast(0.82) brightness(1.08);
-  mix-blend-mode: multiply;
-  opacity: 0.58;
-  /* Dissolve left edge toward cream */
+  filter: sepia(0.2) contrast(1.1) brightness(0.9);
+  mix-blend-mode: normal;
+  opacity: 0.7;
   mask-image: linear-gradient(
     to right,
     transparent 0%,
-    rgba(0,0,0,0.2) 10%,
-    rgba(0,0,0,0.65) 26%,
-    rgba(0,0,0,1) 48%
+    rgba(0,0,0,0.3) 8%,
+    rgba(0,0,0,0.8) 22%,
+    rgba(0,0,0,1) 42%
   );
   -webkit-mask-image: linear-gradient(
     to right,
     transparent 0%,
-    rgba(0,0,0,0.2) 10%,
-    rgba(0,0,0,0.65) 26%,
-    rgba(0,0,0,1) 48%
+    rgba(0,0,0,0.3) 8%,
+    rgba(0,0,0,0.8) 22%,
+    rgba(0,0,0,1) 42%
   );
   will-change: transform;
 }
 
-/* Bottom cream fade */
+/* Bottom dark fade */
 .heroFade {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 36%;
-  background: linear-gradient(to bottom, transparent 0%, var(--paper) 100%);
+  height: 30%;
+  background: linear-gradient(to bottom, transparent, var(--dark));
   pointer-events: none;
 }
 
-/* Title: bottom-left, very large, left-aligned */
+/* Title: bottom-left, very large, light on dark */
 .heroContent {
   position: relative;
   z-index: 2;
-  max-width: 62vw;
+  max-width: 55vw;
 }
 
 .title {
   font-family: var(--font-display);
   font-weight: 300;
   font-style: italic;
-  line-height: 0.88;
-  letter-spacing: -0.022em;
-  color: var(--ink);
+  line-height: 0.87;
+  letter-spacing: -0.025em;
+  color: var(--cream-text);
   margin: 0;
   display: flex;
   flex-direction: column;
@@ -112,14 +102,14 @@
 
 .title span {
   display: block;
-  font-size: clamp(3.8rem, 9.5vw, 9rem);
+  font-size: clamp(3.8rem, 9vw, 8.5rem);
 }
 
 /* Thin vertical scroll indicator */
 .heroBottom {
   position: absolute;
   bottom: 0;
-  left: 7vw;
+  left: 8vw;
   z-index: 2;
   padding-bottom: 0;
 }
@@ -128,14 +118,16 @@
   display: block;
   width: 1px;
   height: 3.5rem;
-  background: linear-gradient(to bottom, rgba(28,26,23,0.35), transparent);
+  background: linear-gradient(to bottom, rgba(237,231,220,0.3), transparent);
 }
 
-/* ── Article column ── */
+/* ── Article card — cream on dark ── */
 .article {
-  max-width: 40rem;
+  background: var(--paper);
+  max-width: 44rem;
   margin: 0 auto;
-  padding: 5rem 1.5rem 0;
+  padding: 4.5rem 3.5rem 5rem;
+  position: relative;
 }
 
 /* ── Essay body ── */
@@ -193,27 +185,33 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 1.5rem;
   margin-bottom: 3rem;
 }
 
 .voteBtn {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.5rem;
   background: none;
-  border: 1px solid var(--rule-strong);
-  border-radius: 2rem;
-  padding: 0.45rem 1rem;
+  border: none;
+  border-bottom: 1px solid var(--rule-strong);
+  border-radius: 0;
+  padding: 0.3rem 0 0.3rem;
   cursor: pointer;
-  font-size: 0.9rem;
-  transition: border-color 0.18s ease, opacity 0.18s ease, background 0.18s ease;
-  opacity: 0.6;
+  color: var(--graphite);
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: color 0.18s ease, border-color 0.18s ease;
+  opacity: 0.7;
 }
 
 .voteBtn:hover:not(:disabled) {
+  color: var(--ink);
+  border-color: var(--ink);
   opacity: 1;
-  border-color: rgba(28,26,23,0.5);
 }
 
 .voteBtn:disabled {
@@ -221,14 +219,14 @@
 }
 
 .voteBtnActive {
-  opacity: 1;
+  color: var(--ink);
   border-color: var(--ink);
-  background: rgba(28, 26, 23, 0.05);
+  opacity: 1;
 }
 
 .voteCount {
   font-family: system-ui, -apple-system, sans-serif;
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   color: var(--graphite);
   letter-spacing: 0.02em;
 }
@@ -390,14 +388,13 @@
 /* ── Mobile ── */
 @media (max-width: 640px) {
   .hero {
-    min-height: 90svh;
     padding: 0 1.5rem 4rem;
   }
 
   .heroArtImg {
-    right: -5%;
-    max-width: 90vw;
-    opacity: 0.46;
+    max-width: 85vw;
+    opacity: 0.6;
+    right: -10%;
   }
 
   .heroContent {
@@ -409,7 +406,7 @@
   }
 
   .article {
-    padding-top: 3.5rem;
+    padding: 3rem 1.5rem 4rem;
   }
 
   .firstParagraph::first-letter {
