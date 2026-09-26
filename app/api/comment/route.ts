@@ -23,6 +23,7 @@ interface Comment {
   text: string;
   name: string;
   timestamp: number;
+  parentId?: string;
 }
 
 export async function GET() {
@@ -46,7 +47,7 @@ export async function POST(req: NextRequest) {
   const ip = getIP(req);
   const ipHash = hashIP(ip);
 
-  let body: { text?: string };
+  let body: { text?: string; parentId?: string };
   try {
     body = await req.json();
   } catch {
@@ -61,27 +62,20 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Comment too long.' }, { status: 400 });
   }
 
-  const kv = await getKV();
-  if (!kv) {
-    // Dev fallback - return a mock comment
-    const comment: Comment = {
-      id: Date.now().toString(),
-      text,
-      name: anonymousName(ipHash),
-      timestamp: Date.now(),
-    };
-    return NextResponse.json({ comment });
-  }
-
   const name = anonymousName(ipHash);
   const comment: Comment = {
     id: createHash('sha256').update(`${ipHash}:${Date.now()}`).digest('hex').slice(0, 12),
     text,
     name,
     timestamp: Date.now(),
+    ...(body.parentId ? { parentId: body.parentId } : {}),
   };
 
-  await kv.rpush('comments:list', JSON.stringify(comment));
+  const kv = await getKV();
+  if (!kv) {
+    return NextResponse.json({ comment });
+  }
 
+  await kv.rpush('comments:list', JSON.stringify(comment));
   return NextResponse.json({ comment });
 }
